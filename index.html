@@ -1,84 +1,87 @@
 <html>
 
 <head>
-  <title>happeer</title>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main.css"/>
-  <link rel="stylesheet" href="mobile.css"/>
-  <meta name=viewport content="width=device-width, initial-scale=1">
+    <title>wholesome!</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="mobile.css" />
+    <meta name=viewport content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <div id="intro_card">
-    <h1>happeer</h1>
-    <p>let the good times scroll!</p>
-    <hr>
-  </div>
-    <div id="content_zone">
+    <div id="intro_card">
+        <h1>wholesome-bot!</h1>
+        <p>bringing some much needed happiness to the internet! ✨</p>
+        <p>press spacebar or click to begin!</p>
+        <hr>
     </div>
-  </div>
-  <div id="load_more">
-    <div class = "button">
-      <button onclick="loadMore()">load more</button>
+    <div id="main_card">
+        <div id="loader">
+            <div class="hollowLoader">
+                <div class="largeBox"></div>
+                <div class="smallBox"></div>
+            </div>
+        </div>
+        <div class="content_zone" id="content_zone">
+
+        </div>
     </div>
-  </div>
-  <footer id="footer_u">
-    <p>made with ❤️</p>
-    <p>lucas chu and zachary lineman. forked from jacky zhao 2019</p>
-  </footer>
-  <script>
-    function clearContent() {
-      document.getElementById("content_zone").innerHTML = "";
-    }
+    <div class="loadContainter" id="load_more">
+        <button class="loadMore" onclick="loadMore()">Load More Posts</button>
+    </div>
+    <footer id="footer_u">
+      <p>made with ❤️</p>
+      <p>lucas chu and zachary lineman. forked from jacky zhao 2019</p>
+    </footer>
+    <script>
+        function clearContent() {
+            document.getElementById("content_zone").innerHTML = "";
+        }
 
-    function insertContent(post) {
-      const count = 10
-      let div = document.getElementById('content_zone');
-      let insert = ""
-      let isVideo = false
+        function insertContent(post) {
+            const count = 10
+            let div = document.getElementById('content_zone');
+            let insert = ""
+            let wasVideo = false
 
-      const uuid = uuidv4()
-      if (post.is_video) {
-          isVideo = true
-          let source = post.v_url
-          insert = `<video controls loop id='${uuid}'>
-                       <source src=${source}/>
+            const uuid = uuidv4()
+            let source = ""
+            if (post.is_video) {
+                wasVideo = true
+                source = post.v_url
+                insert = `<video controls muted loop class="vid"  id='${uuid}'>
                     </video>
                     `
-      } else {
-        if (post.url.includes("gifv")) {
-          isVideo = true
-          let source = post.url.replace('.gifv','.mp4')
-          insert = `<video controls loop id='${uuid}'>
-                        <source src=${source}/>
+            } else {
+                if (post.url.includes("gifv")) {
+                    wasVideo = true
+                    source = post.url.replace('.gifv', '.mp4')
+                    insert = `<video controls muted loop class="vid"  id='${uuid}>
                        </video>
                        `
-        } else if (post.url.includes("m.imgur.com")) {
-          isVideo = true
-          let source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4'
-          insert = `<video controls loop id='${uuid}'>
-                        <source src=${source}/>
+                } else if (post.url.includes("m.imgur.com")) {
+                    wasVideo = true
+                    source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] + '.mp4'
+                    insert = `<video controls muted loop class="vid"  id='${uuid}>
                        </video>
                        `
-        } else if (post.url.includes("gfycat")) {
-          isVideo = true
-          let source = 'https://giant.gfycat.com/' + lower(post.gfy.split('%2F')[10].split('-')[0]) + '.mp4'
-          insert = `<video controls loop id='${uuid}'>
-                        <source src=${source}/>
-                       </video>
-                       `
-        } else {
-          insert = `<img id='img' src='${post.url}''></img>`
-        }
-        
-      }
-      var normalHTML = `<div id = "card">
+                } else if (post.url.includes("gfycat")) {
+                    wasVideo = true
+                    source = 'https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4'
+                    insert = `<video controls muted loop class="vid"  id='${uuid} >
+                    </video>
+                  `
+                } else {
+                    insert = `<img class="img" id='${uuid}' src='${post.url}''></img>`
+                }
+            }
+            var normalHTML = `<div class="card" id = "card">
                 <div class="content-container">
                   <div class="inner">
                     ${insert}
                     <div class="inner">
                       <div id="text">
-                        <p id="title"><b>${post.title}</b></p>
+                        <p id="title">${post.title}</p>
                         <a id="link" href="https://www.reddit.com${post.plink}" target="_blank">Link</a>
                       </div>
                     </div>
@@ -87,66 +90,69 @@
               </div>
 
               `
-      div.innerHTML += normalHTML
-      if (isVideo) {
-        var video = document.getElementById(uuid);
-        video.pause();
-        video.load();
-        video.play();
-      }
-    }
-
-    function uuidv4() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
-
-
-    function getNew() {
-      clearContent()
-      document.getElementById('loader').style.height = "5vh";
-      document.getElementById('loader').style.opacity = "1";
-      document.getElementById('footer_u').style.opacity = "0";
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("POST", '/');
-      xmlHttp.send();
-      xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-          document.getElementById('loader').style.height = "0";
-          document.getElementById('loader').style.opacity = "0";
-          document.getElementById('footer_u').style.opacity = "1";
-          var posts = JSON.parse(xmlHttp.responseText);
-          posts.forEach(element => {
-            insertContent(element)
-          });
+            div.innerHTML += normalHTML
+            if (wasVideo) {
+                var video = document.getElementById(uuid);
+                video.pause();
+                var vidSource = document.createElement('source');
+                vidSource.setAttribute('src', source);
+                video.appendChild(vidSource);
+                video.load();
+            }
         }
-      }
-    }
 
-    function loadMore() {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("POST", '/more');
-      xmlHttp.send();
-      xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-          var posts = JSON.parse(xmlHttp.responseText);
-          posts.forEach(element => {
-            insertContent(element)
-          });
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
         }
-      }
-    }
-  </script>
-  <script>
-    getNew()
-    document.body.onkeyup = function(e) {
-       if (e.keyCode == 32) {
-         setTimeout(getNew(), 1000)
-       }
-     }
-  </script>
+
+
+        function getNew() {
+            clearContent()
+            document.getElementById('loader').style.height = "5vh";
+            document.getElementById('loader').style.opacity = "1";
+            document.getElementById('footer_u').style.opacity = "0";
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("POST", '/');
+            xmlHttp.send();
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    document.getElementById('loader').style.height = "0";
+                    document.getElementById('loader').style.opacity = "0";
+                    document.getElementById('footer_u').style.opacity = "1";
+                    var posts = JSON.parse(xmlHttp.responseText);
+                    posts.forEach(element => {
+                        insertContent(element)
+                    });
+                }
+            }
+        }
+
+        function loadMore() {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("POST", '/more');
+            xmlHttp.send();
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    var posts = JSON.parse(xmlHttp.responseText);
+                    posts.forEach(element => {
+                        insertContent(element)
+                    });
+                }
+            }
+        }
+    </script>
+    <script>
+        getNew()
+            // document.body.onkeyup = function(e) {
+            //   if (e.keyCode == 32) {
+            //     setTimeout(getNew(), 1000)
+            //   }
+            // }
+    </script>
 </body>
 
 </html>
