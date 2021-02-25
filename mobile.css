@@ -22,11 +22,15 @@
     left: 45%
   }
 
-  #img {
-    width: 89vw;
+  .img {
+    width: 90vw;
+    height: auto;
+    border-radius: 3px;
   }
-
-  #vid {
-    width: 89vw;
+  
+  .vid {
+    width: 90vw;
+    height: auto;
+    border-radius: 3px;
   }
 }
