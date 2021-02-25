@@ -1,7 +1,7 @@
 {
-  "name": "wholesome-bot",
+  "name": "happeer",
   "version": "1.0.0",
-  "description": "a wholesome bot that scrapes wholesome subreddits :)",
+  "description": "let the good times scroll!",
   "main": "app.js",
   "dependencies": {
     "express": "^4.17.1",
@@ -14,16 +14,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jackyzha0/wholesome-bot.git"
+    "url": "git+https://github.com/lucas-chu/happeer.git"
   },
   "keywords": [
     "wholesome",
     "bot"
   ],
-  "author": "jacky-zhao",
+  "author": "lucas-chu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jackyzha0/wholesome-bot/issues"
+    "url": "https://github.com/lucas-chu/happeer/issues"
   },
-  "homepage": "https://github.com/jackyzha0/wholesome-bot#readme"
+  "homepage": "https://github.com/lucas-chu/happeer#readme"
 }

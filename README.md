@@ -1,2 +1,2 @@
 # happeer
-infinite scroll of good vibes
+let the good times scroll!

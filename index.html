@@ -10,9 +10,8 @@
 
 <body>
   <div id="intro_card">
-    <h1>wholesome-bot!</h1>
-    <p>bringing some much needed happiness to the internet! ✨</p>
-    <p>press spacebar or click to begin!</p>
+    <h1>let the good times scroll!</h1>
+    <p>bringing some much needed happiness from and to the internet!</p>
     <hr>
   </div>
   <div id="main_card">
@@ -31,7 +30,7 @@
   </div>
   <footer id="footer_u">
     <p>made with ❤️</p>
-    <p>jacky zhao 2019</p>
+    <p>lucas chu and zachary lineman. forked from jacky zhao 2019</p>
   </footer>
   <script>
     function clearContent() {
@@ -42,11 +41,11 @@
       const count = 10
       let div = document.getElementById('content_zone');
       let insert = ""
-      let wasVideo = false
+      let isVideo = false
 
       const uuid = uuidv4()
       if (post.is_video) {
-          wasVideo = true
+          isVideo = true
           let source = post.v_url
           insert = `<video muted loop id='${uuid}'>
                        <source src=${source}/>
@@ -54,21 +53,21 @@
                     `
       } else {
         if (post.url.includes("gifv")) {
-          wasVideo = true
+          isVideo = true
           let source = post.url.replace('.gifv','.mp4')
           insert = `<video muted loop id='${uuid}>
                         <source src=${source}/>
                        </video>
                        `
         } else if (post.url.includes("m.imgur.com")) {
-          wasVideo = true
+          isVideo = true
           let source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4'
           insert = `<video muted loop id='${uuid}>
                         <source src=${source}/>
                        </video>
                        `
         } else if (post.url.includes("gfycat")) {
-          wasVideo = true
+          isVideo = true
           let source = 'https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4'
           insert = `<video muted loop id='${uuid}>
                         <source src=${source}/>
@@ -94,7 +93,7 @@
 
               `
       div.innerHTML += normalHTML
-      if (wasVideo) {
+      if (isVideo) {
         var video = document.getElementById(uuid);
         // video.pause();
         // video.load();
