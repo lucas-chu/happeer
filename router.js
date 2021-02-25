@@ -1,13 +1,37 @@
+const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 const snoowrap = require('snoowrap');
 
 const r = new snoowrap({
   userAgent: 'wholesome bot by /u/circleguy12 v1.0',
-  clientId: 'someID',
-  clientSecret: 'someSecret',
-  refreshToken: 'refreshToken'
+  clientId: 'FTEzEhIr0XB_mw',
+  clientSecret: 'lpySAc_TvUA8VT2JaiVTRMSIbf7uiw',
+  refreshToken: '12899792823-eZJoRdm5HDdF8y-XlKszVLOgVpsofw'
 });
+
+var subreddits = subreddits = ['aww', 'eyebleach', 'wholesomememes']
+var s = subreddits.join('+')
+var p = Promise.resolve(r.getSubreddit(s).getTop({
+  limit: 10,
+  time: 'day'
+}));
+
+p.then(function(posts) {
+  
+  router.post('/more', function(req, res, next) {
+    const postAmount = posts.length
+    posts.fetchMore({amount: 10}).then(extendedPosts => {
+      extendedPosts.splice(0, postAmount)
+      posts = extendedPosts
+      return res.json(parsePosts(extendedPosts))
+    })
+  })
+
+  router.post('/', function(req, res, next) {
+    return res.json(parsePosts(posts))
+  })
+})
 
 router.get('/', function(req, res, next) {
   return res.sendFile('index.html', {
@@ -15,18 +39,12 @@ router.get('/', function(req, res, next) {
   })
 });
 
-router.post('/', function(req, res, next) {
-  var subreddits = subreddits = ['aww', 'eyebleach', 'wholesomememes']
-  var s = subreddits.join('+')
-  var p = Promise.resolve(r.getSubreddit(s).getTop({
-    limit: 100,
-    time: 'day'
-  }));
-
-  p.then(function(posts) {
-    var post = posts[Math.floor(Math.random() * posts.length)]
+function parsePosts(posts) {
+  var responsePosts = []
+  posts.forEach(post => {
+    let ret = {}
     if (post.url.includes("v.redd")) {
-      var ret = {
+      ret = {
         'title': post.title,
         'url': post.url,
         'is_video': true,
@@ -34,7 +52,7 @@ router.post('/', function(req, res, next) {
         'v_url': post.media.reddit_video.fallback_url
       }
     } else if (post.url.includes("gfycat")) {
-      var ret = {
+      ret = {
         'title': post.title,
         'url': post.url,
         'plink': post.permalink,
@@ -42,16 +60,16 @@ router.post('/', function(req, res, next) {
         'is_video': false
       }
     } else {
-      var ret = {
+      ret = {
         'title': post.title,
         'url': post.url,
         'plink': post.permalink,
         'is_video': false
       }
     }
-    console.log(ret)
-    return res.json(ret)
+    responsePosts.push(ret)
   })
-})
+  return responsePosts
+}
 
 module.exports = router;

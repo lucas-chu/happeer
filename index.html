@@ -22,16 +22,12 @@
           <div class="smallBox"></div>
       </div>
     </div>
-    <div class="content-container">
-      <div class="inner">
-        <div id="content" onclick="getNew()"></div>
-        <div id="text">
-          <p id="title"></p>
-          <a id="link" href="" target="_blank"></a>
-        </div>
-      </div>
+    <div id="content_zone">
+
     </div>
-    </div>
+  </div>
+  <div id="load_more">
+    <button onclick="loadMore()">Load More Posts</button>
   </div>
   <footer id="footer_u">
     <p>made with ❤️</p>
@@ -39,22 +35,80 @@
   </footer>
   <script>
     function clearContent() {
-      document.getElementById("title").innerHTML = "";
-      document.getElementById("content").innerHTML = "";
-      document.getElementById("link").innerHTML = "";
-      document.getElementById("link").href = "";
+      document.getElementById("content_zone").innerHTML = "";
     }
 
-    function insertVideo(sourceUrl) {
-      document.getElementById("content").innerHTML = "<video muted loop id='vid'></video>"
-      var video = document.getElementById('vid');
-      video.pause();
-      var source = document.createElement('source');
-      source.setAttribute('src', sourceUrl);
-      video.appendChild(source);
-      video.load();
-      video.play();
+    function insertContent(post) {
+      const count = 10
+      let div = document.getElementById('content_zone');
+      let insert = ""
+      let wasVideo = false
+
+      const uuid = uuidv4()
+      if (post.is_video) {
+          wasVideo = true
+          let source = post.v_url
+          insert = `<video muted loop id='${uuid}'>
+                       <source src=${source}/>
+                    </video>
+                    `
+      } else {
+        if (post.url.includes("gifv")) {
+          wasVideo = true
+          let source = post.url.replace('.gifv','.mp4')
+          insert = `<video muted loop id='${uuid}>
+                        <source src=${source}/>
+                       </video>
+                       `
+        } else if (post.url.includes("m.imgur.com")) {
+          wasVideo = true
+          let source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4'
+          insert = `<video muted loop id='${uuid}>
+                        <source src=${source}/>
+                       </video>
+                       `
+        } else if (post.url.includes("gfycat")) {
+          wasVideo = true
+          let source = 'https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4'
+          insert = `<video muted loop id='${uuid}>
+                        <source src=${source}/>
+                       </video>
+                       `
+        } else {
+          insert = `<img id='img' src='${post.url}''></img>`
+        }
+      }
+      var normalHTML = `<div id = "card">
+                <div class="content-container">
+                  <div class="inner">
+                    ${insert}
+                    <div class="inner">
+                      <div id="text">
+                        <p id="title">${post.title}</p>
+                        <a id="link" href="https://www.reddit.com${post.plink}" target="_blank">Link</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              `
+      div.innerHTML += normalHTML
+      if (wasVideo) {
+        var video = document.getElementById(uuid);
+        // video.pause();
+        // video.load();
+        // video.play();
+      }
     }
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
 
     function getNew() {
       clearContent()
@@ -69,36 +123,37 @@
           document.getElementById('loader').style.height = "0";
           document.getElementById('loader').style.opacity = "0";
           document.getElementById('footer_u').style.opacity = "1";
-          var post = JSON.parse(xmlHttp.responseText);
-          document.getElementById("title").innerHTML = post.title;
-          document.getElementById("link").innerHTML = 'link';
-          document.getElementById("link").href = "https://www.reddit.com"+post.plink;
+          var posts = JSON.parse(xmlHttp.responseText);
+          posts.forEach(element => {
+            insertContent(element)
+          });
+        }
+      }
+    }
 
-          if (post.is_video) {
-            insertVideo(post.v_url)
-          } else {
-            if (post.url.includes("gifv")) {
-              insertVideo(post.url.replace('.gifv','.mp4'))
-            } else if (post.url.includes("m.imgur.com")) {
-              insertVideo('http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4')
-            } else if (post.url.includes("gfycat")) {
-              insertVideo('https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4')
-            } else {
-              document.getElementById("content").innerHTML = "<img id='img'></img>"
-              document.getElementById("img").src = post.url;
-            }
-          }
+    function loadMore() {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("POST", '/more');
+      xmlHttp.send();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+          var posts = JSON.parse(xmlHttp.responseText);
+          posts.forEach(element => {
+            insertContent(element)
+          });
         }
       }
     }
   </script>
   <script>
     getNew()
-    document.body.onkeyup = function(e) {
-      if (e.keyCode == 32) {
-        setTimeout(getNew(), 1000)
-      }
-    }
+    // document.body.onkeyup = function(e) {
+    //   if (e.keyCode == 32) {
+    //     setTimeout(getNew(), 1000)
+    //   }
+    // }
+    
+
   </script>
 </body>
 

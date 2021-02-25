@@ -16,6 +16,6 @@ app.use(function(err, req, res, next) {
   res.send(err.message);
 });
 
-app.listen(process.env.PORT || 3000, function() {
-  console.log('Server started on port ' + (process.env.PORT || 3000));
+const listener = app.listen(process.env.PORT || 3000, function() {
+  console.log(`Server started on port http://localhost:${listener.address().port}`);
 });
