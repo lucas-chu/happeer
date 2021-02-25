@@ -11,6 +11,7 @@ const r = new snoowrap({
 });
 
 var subreddits = subreddits = ['aww', 'eyebleach', 'wholesomememes', 'blessedimages', 'wholesome', 'animalsthatlovemagic']
+var currentPostIndex = 0
 var s = subreddits.join('+')
 var p = Promise.resolve(r.getSubreddit(s).getTop({
   limit: 10,
@@ -19,17 +20,20 @@ var p = Promise.resolve(r.getSubreddit(s).getTop({
 
 p.then(function(posts) {
   
-  router.post('/more', function(req, res, next) {
-    const postAmount = posts.length
+  function getMore() {
     posts.fetchMore({amount: 10}).then(extendedPosts => {
-      extendedPosts.splice(0, postAmount)
       posts = extendedPosts
-      return res.json(parsePosts(extendedPosts))
     })
-  })
+  }
 
   router.post('/', function(req, res, next) {
-    return res.json(parsePosts(posts))
+    const holdIndex = currentPostIndex
+    currentPostIndex += 1;
+    if (currentPostIndex >= posts.length - 3) {
+      getMore();
+    }
+    const post = parsePost(posts[holdIndex])
+    return res.json(post)
   })
 })
 
@@ -39,37 +43,33 @@ router.get('/', function(req, res, next) {
   })
 });
 
-function parsePosts(posts) {
-  var responsePosts = []
-  posts.forEach(post => {
-    let ret = {}
-    if (post.url.includes("v.redd")) {
-      ret = {
-        'title': post.title,
-        'url': post.url,
-        'is_video': true,
-        'plink': post.permalink,
-        'v_url': post.media.reddit_video.fallback_url
-      }
-    } else if (post.url.includes("gfycat")) {
-      ret = {
-        'title': post.title,
-        'url': post.url,
-        'plink': post.permalink,
-        'gfy': post.media.oembed.html,
-        'is_video': false
-      }
-    } else {
-      ret = {
-        'title': post.title,
-        'url': post.url,
-        'plink': post.permalink,
-        'is_video': false
-      }
+function parsePost(post) {
+  let ret = {}
+  if (post.url.includes("v.redd")) {
+    ret = {
+      'title': post.title,
+      'url': post.url,
+      'is_video': true,
+      'plink': post.permalink,
+      'v_url': post.media.reddit_video.fallback_url
     }
-    responsePosts.push(ret)
-  })
-  return responsePosts
+  } else if (post.url.includes("gfycat")) {
+    ret = {
+      'title': post.title,
+      'url': post.url,
+      'plink': post.permalink,
+      'gfy': post.media.oembed.html,
+      'is_video': false
+    }
+  } else {
+    ret = {
+      'title': post.title,
+      'url': post.url,
+      'plink': post.permalink,
+      'is_video': false
+    }
+  }
+  return ret
 }
 
 module.exports = router;
