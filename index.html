@@ -12,9 +12,9 @@
 
   <body>
     <div id="intro_card">
-      <h1>wholesome-bot!</h1>
-      <p>bringing some much needed happiness to the internet! ✨</p>
-      <p>Press the space bar to see the next post!</p>
+      <h1>happeer</h1>
+      <p>✨bringing some much needed happiness to the internet! ✨</p>
+      <p>press space or click for more happiness</p>
       <hr />
     </div>
     <div id="main_card">
@@ -27,14 +27,15 @@
       <div class="content_zone" id="content_zone"></div>
     </div>
     <div class="loadContainter" id="load_more">
-      <button class="loadMore" onclick="nextPost()">Load Next Post</button>
+      <button class="loadMore" onclick="nextPost()">more happiness</button>
     </div>
     <footer id="footer_u">
-      <p>made with ❤️</p>
-      <p>Lucas Chu and Zachary Lineman. forked from jacky zhao 2019</p>
+      <p>made with ❤️ by lucas and zach</p>
+      <p>forked from jacky zhao 2019</p>
     </footer>
     
     <script>
+      nextPost()
       function clearContent() {
         document.getElementById("content_zone").innerHTML = "";
       }
@@ -49,21 +50,21 @@
         if (post.is_video) {
           wasVideo = true;
           source = post.v_url;
-          insert = `<video controls muted loop class="vid"  id='${uuid}'>
+          insert = `<video controls loop class="vid"  id='${uuid}'>
                     </video>
                     `;
         } else {
           if (post.url.includes("gifv")) {
             wasVideo = true;
             source = post.url.replace(".gifv", ".mp4");
-            insert = `<video controls muted loop class="vid"  id='${uuid}>
+            insert = `<video controls loop class="vid"  id='${uuid}>
                        </video>
                        `;
           } else if (post.url.includes("m.imgur.com")) {
             wasVideo = true;
             source =
               "http://i.imgur.com/" + post.url.split("/").slice(-1)[0] + ".mp4";
-            insert = `<video controls muted loop class="vid"  id='${uuid}>
+            insert = `<video controls loop class="vid"  id='${uuid}>
                        </video>
                        `;
           } else if (post.url.includes("gfycat")) {
@@ -72,7 +73,7 @@
               "https://giant.gfycat.com/" +
               post.gfy.split("%2F")[10].split("-")[0] +
               ".mp4";
-            insert = `<video controls muted loop class="vid"  id='${uuid} >
+            insert = `<video controls loop class="vid"  id='${uuid} >
                     </video>
                   `;
           } else {
@@ -136,10 +137,11 @@
       }
     </script>
     <script>
-      nextPost()
+      var i;
       document.body.onkeyup = function (e) {
         if (e.keyCode == 32) {
-          nextPost()        
+            nextPost()
+          }       
         }
       };
     </script>

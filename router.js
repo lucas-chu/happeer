@@ -4,7 +4,7 @@ var router = express.Router();
 const snoowrap = require('snoowrap');
 
 const r = new snoowrap({
-  userAgent: 'wholesome bot by /u/circleguy12 v1.0',
+  userAgent: 'zach"s reddit',
   clientId: 'FTEzEhIr0XB_mw',
   clientSecret: 'lpySAc_TvUA8VT2JaiVTRMSIbf7uiw',
   refreshToken: '12899792823-eZJoRdm5HDdF8y-XlKszVLOgVpsofw'
@@ -15,7 +15,7 @@ var currentPostIndex = 0
 var s = subreddits.join('+')
 var p = Promise.resolve(r.getSubreddit(s).getTop({
   limit: 10,
-  time: 'week'
+  time: 'day'
 }));
 
 p.then(function(posts) {

@@ -8,6 +8,7 @@
 #intro_card {
   width: 50vw;
   margin-left: 25vw;
+  text-align: center;
 }
 
 #main_card {
@@ -21,7 +22,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  align-content: center;
 }
 
 .inner {
@@ -32,11 +32,10 @@
   /* border-style: solid; */
   border-radius: 7px;
   /* border-color: #c8c5d1; */
-  background-color: #e1ddec;
+  background-color: #FBE8A6;
   /* border-width: 2px; */
   margin: 1em;
   padding: 2em;
-  align-items: center;
 }
 
 #text {
@@ -60,7 +59,7 @@ footer p {
 }
 
 footer {
-  left: 46%;
+  left: 50%;
 }
 
 body {
