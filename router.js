@@ -10,11 +10,11 @@ const r = new snoowrap({
   refreshToken: '12899792823-eZJoRdm5HDdF8y-XlKszVLOgVpsofw'
 });
 
-var subreddits = subreddits = ['aww', 'eyebleach', 'wholesomememes']
+var subreddits = subreddits = ['aww', 'eyebleach', 'wholesomememes', 'blessedimages', 'wholesome', 'animalsthatlovemagic']
 var s = subreddits.join('+')
 var p = Promise.resolve(r.getSubreddit(s).getTop({
   limit: 10,
-  time: 'day'
+  time: 'week'
 }));
 
 p.then(function(posts) {

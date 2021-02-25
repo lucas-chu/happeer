@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>wholesome!</title>
+  <title>happeer</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main.css"/>
   <link rel="stylesheet" href="mobile.css"/>
@@ -10,23 +10,17 @@
 
 <body>
   <div id="intro_card">
-    <h1>let the good times scroll!</h1>
-    <p>bringing some much needed happiness from and to the internet!</p>
+    <h1>happeer</h1>
+    <p>let the good times scroll!</p>
     <hr>
   </div>
-  <div id="main_card">
-    <div id="loader">
-      <div class="hollowLoader">
-          <div class="largeBox"></div>
-          <div class="smallBox"></div>
-      </div>
-    </div>
     <div id="content_zone">
-
     </div>
   </div>
   <div id="load_more">
-    <button onclick="loadMore()">Load More Posts</button>
+    <div class = "button">
+      <button onclick="loadMore()">load more</button>
+    </div>
   </div>
   <footer id="footer_u">
     <p>made with ❤️</p>
@@ -47,7 +41,7 @@
       if (post.is_video) {
           isVideo = true
           let source = post.v_url
-          insert = `<video muted loop id='${uuid}'>
+          insert = `<video controls loop id='${uuid}'>
                        <source src=${source}/>
                     </video>
                     `
@@ -55,27 +49,28 @@
         if (post.url.includes("gifv")) {
           isVideo = true
           let source = post.url.replace('.gifv','.mp4')
-          insert = `<video muted loop id='${uuid}>
+          insert = `<video controls loop id='${uuid}'>
                         <source src=${source}/>
                        </video>
                        `
         } else if (post.url.includes("m.imgur.com")) {
           isVideo = true
           let source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4'
-          insert = `<video muted loop id='${uuid}>
+          insert = `<video controls loop id='${uuid}'>
                         <source src=${source}/>
                        </video>
                        `
         } else if (post.url.includes("gfycat")) {
           isVideo = true
-          let source = 'https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4'
-          insert = `<video muted loop id='${uuid}>
+          let source = 'https://giant.gfycat.com/' + lower(post.gfy.split('%2F')[10].split('-')[0]) + '.mp4'
+          insert = `<video controls loop id='${uuid}'>
                         <source src=${source}/>
                        </video>
                        `
         } else {
           insert = `<img id='img' src='${post.url}''></img>`
         }
+        
       }
       var normalHTML = `<div id = "card">
                 <div class="content-container">
@@ -83,7 +78,7 @@
                     ${insert}
                     <div class="inner">
                       <div id="text">
-                        <p id="title">${post.title}</p>
+                        <p id="title"><b>${post.title}</b></p>
                         <a id="link" href="https://www.reddit.com${post.plink}" target="_blank">Link</a>
                       </div>
                     </div>
@@ -95,9 +90,9 @@
       div.innerHTML += normalHTML
       if (isVideo) {
         var video = document.getElementById(uuid);
-        // video.pause();
-        // video.load();
-        // video.play();
+        video.pause();
+        video.load();
+        video.play();
       }
     }
 
@@ -146,13 +141,11 @@
   </script>
   <script>
     getNew()
-    // document.body.onkeyup = function(e) {
-    //   if (e.keyCode == 32) {
-    //     setTimeout(getNew(), 1000)
-    //   }
-    // }
-    
-
+    document.body.onkeyup = function(e) {
+       if (e.keyCode == 32) {
+         setTimeout(getNew(), 1000)
+       }
+     }
   </script>
 </body>
 

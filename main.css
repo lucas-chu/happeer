@@ -75,10 +75,11 @@ p {
   border-radius: 3px;
 }
 
-#vid {
+video {
   width: 50vw;
   height: auto;
-  border-radius: 3px;
+  position:auto;
+  object-fit: cover;
 }
 
 #loader {
@@ -113,6 +114,13 @@ p {
   z-index: 1;
   outline: 1px solid transparent;
   animation: smallBoxAnim 1.25s alternate infinite ease-in-out;
+}
+.button {
+  position: flex;
+  text-align: center;
+  align-self: center;
+  align-content: center;
+  outline: 1px solid transparent;
 }
 @keyframes smallBoxAnim {
   0% {
