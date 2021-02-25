@@ -45,35 +45,32 @@
       let wasVideo = false
 
       const uuid = uuidv4()
+      let source = ""
       if (post.is_video) {
           wasVideo = true
-          let source = post.v_url
-          insert = `<video muted loop id='${uuid}'>
-                       <source src=${source}/>
+          source = post.v_url
+          insert = `<video muted loop  id='${uuid}'>
                     </video>
                     `
       } else {
         if (post.url.includes("gifv")) {
           wasVideo = true
-          let source = post.url.replace('.gifv','.mp4')
-          insert = `<video muted loop id='${uuid}>
-                        <source src=${source}/>
+          source = post.url.replace('.gifv','.mp4')
+          insert = `<video muted loop  id='${uuid}>
                        </video>
                        `
         } else if (post.url.includes("m.imgur.com")) {
           wasVideo = true
-          let source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4'
-          insert = `<video muted loop id='${uuid}>
-                        <source src=${source}/>
+          source = 'http://i.imgur.com/' + post.url.split('/').slice(-1)[0] +'.mp4'
+          insert = `<video muted loop  id='${uuid}>
                        </video>
                        `
         } else if (post.url.includes("gfycat")) {
           wasVideo = true
-          let source = 'https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4'
-          insert = `<video muted loop id='${uuid}>
-                        <source src=${source}/>
-                       </video>
-                       `
+          source = 'https://giant.gfycat.com/' + post.gfy.split('%2F')[10].split('-')[0] + '.mp4'
+          insert = `<video muted loop  id='${uuid}>
+                    </video>
+                  `
         } else {
           insert = `<img id='img' src='${post.url}''></img>`
         }
@@ -96,9 +93,12 @@
       div.innerHTML += normalHTML
       if (wasVideo) {
         var video = document.getElementById(uuid);
-        // video.pause();
-        // video.load();
-        // video.play();
+        video.pause();
+        var vidSource = document.createElement('source');
+        vidSource.setAttribute('src', source);
+        video.appendChild(vidSource);
+        video.load();
+        video.play();
       }
     }
 

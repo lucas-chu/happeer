@@ -5,9 +5,6 @@ const snoowrap = require('snoowrap');
 
 const r = new snoowrap({
   userAgent: 'wholesome bot by /u/circleguy12 v1.0',
-  clientId: 'FTEzEhIr0XB_mw',
-  clientSecret: 'lpySAc_TvUA8VT2JaiVTRMSIbf7uiw',
-  refreshToken: '12899792823-eZJoRdm5HDdF8y-XlKszVLOgVpsofw'
 });
 
 var subreddits = subreddits = ['aww', 'eyebleach', 'wholesomememes']
